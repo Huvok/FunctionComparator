@@ -25,8 +25,8 @@ function output = RS(fitnessFun, popSize, nVars, lowerBound, upperBound,...
     while ~stop
         for l = 1:popSize
             % Generar una solución aleatoria
-            candidate = lowerBound(l) + (upperBound(l) - ...
-                lowerBound(l)) * rand(1, popSize);
+            candidate = lowerBound + (upperBound - ...
+                lowerBound) .* rand(1, nVars);
             candidate_fitness = feval(fitnessFun, candidate);
 
             % Si el candidato es mejor, actualizar

@@ -38,6 +38,7 @@ while ~stop
         sigma_child = mean(sigma_pop(idx)) * exp(tau*randn);
         child = mean(population(idx,:)) + sigma_child  * (randn(1,nVars) .*...
             prob_mut_vct); 
+        child = max([min([upperBound;child],[],1);lowerBound],[],1);
         fitness_child = feval(fitnessFun,child);
 
         if any(fitness_pop(idx) > fitness_child)

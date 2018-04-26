@@ -44,6 +44,8 @@ while ~stop
         
         % Actualizar posición de partícula l y evaluar
         positions(l, :) = positions(l, :) + velocities(l, :);
+        positions(l, :) = max([min([upperBound;positions(l, :)],[],1);...
+            lowerBound],[],1);
         candidate_fitness = feval(fitnessFun, positions(l, :));
         
         % Si el fitness es mejor, reemplazar

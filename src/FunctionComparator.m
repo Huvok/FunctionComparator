@@ -5,7 +5,7 @@ function FunctionComparator()
     arrFunctions = [1, 2, 3, 4, 5];
     
     % Especificar el número de réplicas por función
-    replicas = [5, 5, 5, 5, 5];
+    replicas = [30, 5, 5, 5, 5];
     
     % Especificar número de dimensiones por función
     dimensions = [10, 10, 10, 10, 10];
@@ -41,10 +41,10 @@ function FunctionComparator()
     % ES
     
     % Mu para ES (Tamaño de población)
-    structES.mu = 10;
+    structES.mu = 100;
     
     % Lambda para ES (Hijos a producir)
-    structES.lambda = 10;
+    structES.lambda = 100;
     
     % Probabilidad de cruza
     structES.crossover = .5;
@@ -56,7 +56,7 @@ function FunctionComparator()
     % DE
     
     % Tamaño de la población
-    structDE.popSize = 10;
+    structDE.popSize = 100;
     
     % Probabilidad de cruza
     structDE.crossover = .5;
@@ -68,7 +68,7 @@ function FunctionComparator()
     % PSO
     
     % Tamaño de la población
-    structPSO.popSize = 10;
+    structPSO.popSize = 100;
     
     % c1
     structPSO.c1 = 2;
@@ -83,14 +83,14 @@ function FunctionComparator()
     % RS
     
     % Tamaño de la población
-    structRS.popSize = 10;
+    structRS.popSize = 100;
     
     for i=1:5 
         % Function 1 ------------------------------------------------------
         if arrFunctions(i) == 1
             figure('units','normalized','outerposition',[0 0 1 1])
             % F1 ES -------------------------------------------------------
-            hold on;
+%             hold on;
             for j=1:replicas(i)
                output = ES(@test_function_1, structES.mu, ...
                    structES.lambda, dimensions(1), lower_bounds(1, :), ...
@@ -106,7 +106,9 @@ function FunctionComparator()
 
             meanReplicas = meanReplicas / replicas(i);
             sz = size(meanReplicas);
-            plot(linspace(1, sz(1), sz(1)), meanReplicas', 'r');
+%             loglog(linspace(1, sz(1), sz(1)), meanReplicas', 'r');
+            meanReplicasES = meanReplicas;
+%             loglog(1:length(meanReplicas), meanReplicas', 'r');
             
             % F1 DE -------------------------------------------------------
             for j=1:replicas(i)
@@ -124,7 +126,9 @@ function FunctionComparator()
 
             meanReplicas = meanReplicas / replicas(i);
             sz = size(meanReplicas);
-            plot(linspace(1, sz(1), sz(1)), meanReplicas', 'b');
+%             loglog(linspace(1, sz(1), sz(1)), meanReplicas', 'b');
+%             loglog(1:length(meanReplicas), meanReplicas', 'b');
+            meanReplicasDE = meanReplicas;            
             
             % F1 PSO ------------------------------------------------------
             for j=1:replicas(i)
@@ -142,7 +146,9 @@ function FunctionComparator()
 
             meanReplicas = meanReplicas / replicas(i);
             sz = size(meanReplicas);
-            plot(linspace(1, sz(1), sz(1)), meanReplicas', 'k');
+%             loglog(linspace(1, sz(1), sz(1)), meanReplicas', 'k');
+%             loglog(1:length(meanReplicas), meanReplicas', 'k');
+            meanReplicasPSO = meanReplicas;
             
             % F1 RS -------------------------------------------------------
             for j=1:replicas(i)
@@ -159,10 +165,16 @@ function FunctionComparator()
 
             meanReplicas = meanReplicas / replicas(i);
             sz = size(meanReplicas);
-            plot(linspace(1, sz(1), sz(1)), meanReplicas', 'g');
+%             loglog(linspace(1, sz(1), sz(1)), meanReplicas', 'g');
+%             loglog(1:length(meanReplicas), meanReplicas', 'g');
+            meanReplicasRS = meanReplicas;
             
+            loglog(1:length(meanReplicasES), meanReplicasES', 'r',...
+                1:length(meanReplicasDE), meanReplicasDE', 'b',...
+                1:length(meanReplicasPSO), meanReplicasPSO', 'k',...
+                1:length(meanReplicasRS), meanReplicasRS', 'g')
             legend("ES", "DE", "PSO", "RS");
-            hold off;
+%             hold off;
             
         % Function 2 ------------------------------------------------------
         elseif arrFunctions(i) == 2
