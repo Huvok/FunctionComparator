@@ -5,17 +5,29 @@ function res = FunctionComparator()
 
     % Especificar las funciones deseadas:
     %   1. Bent Cigar Function
-    %   2. 
+    %   2. Rastrigin’s Function
+    %   3. SF2 @300
+    %   4. SF2 @400
+    %   5. SF2 @500
+    %   6. Discus Function
     arrFunctions = [1, 2, 3, 4, 5];
     
+    % Cada matriz contiene 6 elementos o 6 renglones, es uno por cada
+    %   función, sin respetar el orden elegido arriba es decir,
+    %   si en el arreglo arrFunctions se eligió primero la función 2,
+    %   el renglon/elemento a modificar en las siguientes matrices es el
+    %   renglon 2, a pesar de que la función 2 sea la primera en evaluarse.
+    
     % Especificar el número de réplicas por función
-    replicas = [5, 5, 5, 5, 5];
+    replicas = [5, 5, 5, 5, 5, 5];
     
     % Especificar número de dimensiones por función
-    dimensions = [5, 5, 5, 5, 5];
+    dimensions = [5, 5, 5, 5, 5, 5];
     
     % Especificar los lower bounds por dimensión, por función
     lower_bounds = [-100 -100 -100 -100 -100;...
+        -100 -100 -100 -100 -100;...
+        -100 -100 -100 -100 -100;...
         -100 -100 -100 -100 -100;...
         -100 -100 -100 -100 -100;...
         -100 -100 -100 -100 -100;...
@@ -26,10 +38,12 @@ function res = FunctionComparator()
         100 100 100 100 100;...
         100 100 100 100 100;...
         100 100 100 100 100;...
+        100 100 100 100 100;...
+        100 100 100 100 100;...
         100 100 100 100 100];
     
     % Especificar número de evaluaciones máximas por función
-    maxEvals = [100, 100, 100, 100, 100];
+    maxEvals = [100, 100, 100, 100, 100, 100];
     
     % ---------------------------------------------------------------------
     % ES
@@ -783,123 +797,6 @@ function res = FunctionComparator()
                 1:length(meanReplicasRS), meanReplicasRS', 'g')
             legend("ES", "DE", "PSO", "RS");
             title('Discus Function');
-        
-        elseif arrFunctions(i) == 7
-            figure('units','normalized','outerposition',[0 0 1 1])
-            ESResult = struct;
-            ESResult(1).best_fitness = 99999999999999999999;
-            DEResult = struct;
-            DEResult(1).best_fitness = 99999999999999999999;
-            PSOResult = struct;
-            PSOResult(1).best_fitness = 99999999999999999999;
-            RSResult = struct;
-            RSResult(1).best_fitness = 99999999999999999999;
-            
-            % F7 ES -------------------------------------------------------
-            for j=1:replicas(i)
-               output = ES(@test_function_7, structES.mu, ...
-                   structES.lambda, dimensions(7), lower_bounds(7, :), ...
-                   upper_bounds(7, :), structES.crossover, ...
-                   structES.mutation, maxEvals(7));
-
-               if (j == 1)
-                   meanReplicas = output.mean_iter;
-                   ESResult(1).IterationsPerReplica = output.iter;
-               else
-                   meanReplicas = meanReplicas + output.mean_iter;
-               end
-               
-               if output.best_fitness < ESResult.best_fitness
-                   ESResult(1).best_fitness = output.best_fitness;
-                   ESResult(1).best_sol = output.best_sol;
-                   ESResult(1).best_fitness_iter = ...
-                       output.best_fitness_iter;
-               end
-            end
-
-            res(1).function7(1).ES = ESResult;
-            meanReplicasES = meanReplicas / replicas(i);
-            
-            % F7 DE -------------------------------------------------------
-            for j=1:replicas(i)
-                output = DE(@test_function_7, dimensions(7), ...
-                    lower_bounds(7, :), upper_bounds(7, :), ...
-                    structDE.popSize, structDE.crossover, ...
-                    structDE.diffWeight, maxEvals(7));
-
-                if (j == 1)
-                    meanReplicas = output.mean_iter;
-                    DEResult(1).IterationsPerReplica = output.iter;
-                else
-                    meanReplicas = meanReplicas + output.mean_iter;
-                end
-                
-                if output.best_fitness < DEResult.best_fitness
-                    DEResult(1).best_fitness = output.best_fitness;
-                    DEResult(1).best_sol = output.best_sol;
-                    DEResult(1).best_fitness_iter = ...
-                       output.best_fitness_iter;
-                end
-            end
-
-            res(1).function7(1).DE = DEResult;
-            meanReplicasDE = meanReplicas / replicas(i);
-            
-            % F7 PSO ------------------------------------------------------
-            for j=1:replicas(i)
-                output = PSO(@test_function_7, structPSO.popSize, ...
-                    dimensions(7), lower_bounds(7, :), ...
-                    upper_bounds(7, :), structPSO.c1, structPSO.c2, ...
-                    structPSO.w, maxEvals(7));
-
-                if (j == 1)
-                    meanReplicas = output.mean_iter;
-                    PSOResult(1).IterationsPerReplica = output.iter;
-                else
-                    meanReplicas = meanReplicas + output.mean_iter;
-                end
-                
-                if output.best_fitness < PSOResult.best_fitness
-                    PSOResult(1).best_fitness = output.best_fitness;
-                    PSOResult(1).best_sol = output.best_sol;
-                    PSOResult(1).best_fitness_iter = ...
-                       output.best_fitness_iter;
-                end
-            end
-
-            res(1).function7(1).PSO = PSOResult;
-            meanReplicasPSO = meanReplicas / replicas(i);
-            
-            % F7 RS -------------------------------------------------------
-            for j=1:replicas(i)
-                output = RS(@test_function_7, structRS.popSize, ...
-                    dimensions(7), lower_bounds(7, :), ...
-                    upper_bounds(7, :), maxEvals(7));
-                
-                if (j == 1)
-                    meanReplicas = output.mean_iter;
-                    RSResult(1).IterationsPerReplica = output.iter;
-                else
-                    meanReplicas = meanReplicas + output.mean_iter;
-                end
-                
-                if output.best_fitness < RSResult.best_fitness
-                    RSResult(1).best_fitness = output.best_fitness;
-                    RSResult(1).best_sol = output.best_sol;
-                    RSResult(1).best_fitness_iter = ...
-                       output.best_fitness_iter;
-                end
-            end
-
-            res(1).function7(1).RS = RSResult;
-            meanReplicasRS = meanReplicas / replicas(i);
-            
-            loglog(1:length(meanReplicasES), meanReplicasES', 'r',...
-                1:length(meanReplicasDE), meanReplicasDE', 'b',...
-                1:length(meanReplicasPSO), meanReplicasPSO', 'k',...
-                1:length(meanReplicasRS), meanReplicasRS', 'g')
-            legend("ES", "DE", "PSO", "RS");
-            title("Ackley's Function");
             
         end
     end
