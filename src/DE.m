@@ -54,6 +54,9 @@ function output = DE(fitness, dimensions, lb, ub, popSize, crossoverProb, diffWe
                 end
             end
             
+            population(i, :) = max([min([ub;population(i, :)],[],1);...
+                lb],[],1);
+            
             % If this child is better, add it to the population %
             fitnessOld = populationFitness(i);
             fitnessNew = fitness(y);
@@ -64,7 +67,7 @@ function output = DE(fitness, dimensions, lb, ub, popSize, crossoverProb, diffWe
                 if (fitnessNew < bestFitness)
                     bestSol = y;
                     bestFitness = fitnessNew;
-                    bestFitnessIter = iterCnt;
+                    bestFitnessIter = iterCnt + 1;
                 end
             end
         end
@@ -77,8 +80,9 @@ function output = DE(fitness, dimensions, lb, ub, popSize, crossoverProb, diffWe
     output = struct;
     output(1).Names = {'Samuel Pacheco','Hugo García','Carla Trejo'};
     output(1).IDs = {'A01039815','A00815354','A00813868'};
-    output(1).Best_solution = bestSol;
-    output(1).Best_Fitness = bestFitness;
-    output(1).Best_Fitness_Iter = bestFitnessIter;
+    output(1).best_sol = bestSol;
+    output(1).best_fitness = bestFitness;
+    output(1).best_fitness_iter = bestFitnessIter;
     output(1).mean_iter = mean_iter;
+    output(1).iter = iterCnt;
 end

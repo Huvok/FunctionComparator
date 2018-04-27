@@ -188,7 +188,7 @@ function res = FunctionComparator()
                 end
             end
 
-            res(1).function1(1).RS = RSResult;
+            res(1).function1(1).RS = PSOResult;
             meanReplicasRS = meanReplicas / replicas(i);
             
             loglog(1:length(meanReplicasES), meanReplicasES', 'r',...

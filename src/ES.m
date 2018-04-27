@@ -27,6 +27,9 @@ end
 
 bestIter = min(fitness_pop);
 meanIter = mean(fitness_pop);
+iterCnt = 0;
+best = min(fitness_pop);
+best_fitness_iter = 0;
 
 while ~stop
     for l = 1:lambda
@@ -49,6 +52,11 @@ while ~stop
         end
 
         evaluations = evaluations + 1;
+        
+        if fitness_child < best
+            best = fitness_child;
+            best_fitness_iter = iterCnt + 1;
+        end
 
         if maxEvals == evaluations || min(sigma_pop) < sigmaMin
             stop = true;
@@ -57,6 +65,7 @@ while ~stop
     end
     bestIter = cat(1,bestIter,min(fitness_pop));
     meanIter = cat(1,meanIter,mean(fitness_pop));
+    iterCnt = iterCnt + 1;
 end
 
 [~,idx] = min(fitness_pop);
@@ -70,5 +79,6 @@ output(1).best_iter = bestIter;
 output(1).mean_iter = meanIter;
 output(1).evaluations = evaluations;
 output(1).time = etime(clock,start);
-
+output(1).iter = iterCnt;
+output(1).best_fitness_iter = best_fitness_iter;
 end

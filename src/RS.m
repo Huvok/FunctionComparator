@@ -21,6 +21,9 @@ function output = RS(fitnessFun, popSize, nVars, lowerBound, upperBound,...
 
     bestIter = min(fitness_pop);
     meanIter = mean(fitness_pop);
+    iterCnt = 0;
+    best = min(fitness_pop);
+    best_fitness_iter = 0;
 
     while ~stop
         for l = 1:popSize
@@ -34,6 +37,11 @@ function output = RS(fitnessFun, popSize, nVars, lowerBound, upperBound,...
                 population(l, :) = candidate;
                 fitness_pop(l) = candidate_fitness;
             end
+            
+            if candidate_fitness < best
+                best = candidate_fitness;
+                best_fitness_iter = iterCnt + 1;
+            end
 
 
             evaluations = evaluations + 1;
@@ -45,6 +53,7 @@ function output = RS(fitnessFun, popSize, nVars, lowerBound, upperBound,...
 
         bestIter = cat(1,bestIter,min(fitness_pop));
         meanIter = cat(1,meanIter,mean(fitness_pop));
+        iterCnt = iterCnt + 1;
     end
 
     [~,idx] = min(fitness_pop);
@@ -58,5 +67,7 @@ function output = RS(fitnessFun, popSize, nVars, lowerBound, upperBound,...
     output(1).mean_iter = meanIter;
     output(1).evaluations = evaluations;
     output(1).time = etime(clock,start);
+    output(1).iter = iterCnt;
+    output(1).best_fitness_iter = best_fitness_iter;
 
 end

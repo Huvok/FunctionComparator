@@ -31,6 +31,8 @@ end
 
 bestIter = min(fitness_pop);
 meanIter = mean(fitness_pop);
+iterCnt = 0;
+best_fitness_iter = 0;
 
 while ~stop
     for l = 1:popSize
@@ -56,6 +58,7 @@ while ~stop
             if candidate_fitness < champ
                champ = candidate_fitness;
                Gb = positions(l, :);
+               best_fitness_iter = iterCnt + 1;
             end
         end
         
@@ -68,6 +71,7 @@ while ~stop
     
     bestIter = cat(1,bestIter,min(fitness_pop));
     meanIter = cat(1,meanIter,mean(fitness_pop));
+    iterCnt = iterCnt + 1;
 end
 
 [~,idx] = min(fitness_pop);
@@ -81,5 +85,7 @@ output(1).best_iter = bestIter;
 output(1).mean_iter = meanIter;
 output(1).evaluations = evaluations;
 output(1).time = etime(clock,start);
+output(1).iter = iterCnt;
+output(1).best_fitness_iter = best_fitness_iter;
 
 end
